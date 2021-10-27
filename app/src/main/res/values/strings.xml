@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GuestbookKemendagri</string>
+    <string name="app_name">Buku Tamu DITJEN DUKCAPIL</string>
     <string name="loading">loading...</string>
     <string name="detail">Detail</string>
     <string name="nomor_telepon">Nomor Telepon</string>
@@ -24,7 +24,7 @@
     <string name="nik">NIK</string>
     <string name="kirim">Kirim</string>
     <string name="dari">Dari</string>
-    <string name="tujuan">Tujuan</string>
+    <string name="tujuan">Pilih Tujuan :</string>
     <string name="golongan_darah">Golongan Darah</string>
     <string name="gol_darah">Gol. Darah</string>
     <string name="agama">Agama</string>

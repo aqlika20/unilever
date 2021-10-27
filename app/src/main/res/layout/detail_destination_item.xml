@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <data>
@@ -11,23 +12,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/linearLayoutWrapper"
-            android:paddingHorizontal="5dp"
-            android:paddingVertical="5dp"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:baselineAligned="false">
+            android:layout_height="90dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            style="@style/Card.Container">
 
-            <TextView
-                android:id="@+id/tvDetail"
+            <LinearLayout
+                android:id="@+id/linearLayoutWrapper"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/detail" />
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_detail"
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/first"
+                    android:visibility="visible"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:src="@drawable/ic_home_new" />
 
-        </LinearLayout>
+                <LinearLayout
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDetail"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/irul_text"
+                        android:text="@string/detail" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 </layout>

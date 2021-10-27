@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="purple_200">#3949AB</color>
+    <color name="purple_500">#1E88E5</color>
+    <color name="purple_700">#039BE5</color>x
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="orange">#FF8700</color>
+    <color name="gray">#F4F4F4</color>
+    <color name="irul_blue">#BFD8FC</color>
+    <color name="irul_border_blue">#3481F0</color>
+    <color name="irul_text">#3481F0</color>
+    <color name="irul_icon">#87ABDD</color>
     <color name="default_text_view_color">#808080</color>
     <color name="default_background_color">#FAFAFA</color>
 </resources>

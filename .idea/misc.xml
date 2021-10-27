@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/bg_detail.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/bg_edittext.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/bg_picture.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/biru.xml" value="0.3769230769230769" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_check_blue.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_check_red.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_home.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_home_new.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_home_white.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/red.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/activity_destination_form.xml" value="0.43537414965986393" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/detail_destination_item.xml" value="0.42459983150800334" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/primary_destination_item.xml" value="0.2957427536231884" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/toolbar.xml" value="0.33" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3828125" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3828125" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

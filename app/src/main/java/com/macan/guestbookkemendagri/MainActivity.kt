@@ -1,6 +1,8 @@
 package com.macan.guestbookkemendagri
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Fragment
@@ -88,9 +90,13 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         var LIVENESS_REQUEST_CODE = 1
     }
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        supportActionBar?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        supportActionBar?.setCustomView(R.layout.toolbar)
         activity = this
 
         methodTitle = findViewById(R.id.methodTitle)

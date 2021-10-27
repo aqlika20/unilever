@@ -1,9 +1,12 @@
 package com.macan.guestbookkemendagri
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,9 +52,16 @@ class DestinationFormActivity : AppCompatActivity() {
     private var nik : String = ""
 
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+        supportActionBar?.setCustomView(R.layout.toolbar)
+
         setContentView(binding.root)
+
+
 
         with(binding){
             if(base64Image != null){
@@ -111,15 +121,27 @@ class DestinationFormActivity : AppCompatActivity() {
                                 tvNama.text = person.getString("NAMA_LGKP")
                                 tvTtl.text = "${person.getString("TMPT_LHR")}, ${Helper.convertDateTimeToReadable(person.getString("TGL_LHR"), 2)}"
                                 if(dos1Vaccinated){
-                                    tvVaksin1.text = "$dos1VaccinationDate (SUDAH)"
+                                    lftsuccess1.visibility = View.VISIBLE
+                                    tvVaksin1.text = "$dos1VaccinationDate"
+                                    statVaksin1.text = "SUDAH"
+                                    successVaksin1.visibility = View.VISIBLE
                                 }else{
-                                    tvVaksin1.text = " - (BELUM)"
+                                    unlftsuccess1.visibility = View.VISIBLE
+                                    tvVaksin1.text = " - "
+                                    statVaksin1.text = "BELUM"
+                                    unsuccessVaksin1.visibility = View.VISIBLE
                                 }
 
                                 if(dos2Vaccinated){
-                                    tvVaksin2.text = "$dos2VaccinationDate (SUDAH)"
+                                    lftsuccess2.visibility = View.VISIBLE
+                                    tvVaksin2.text = "$dos2VaccinationDate"
+                                    statVaksin2.text = "SUDAH"
+                                    successVaksin2.visibility = View.VISIBLE
                                 }else{
-                                    tvVaksin2.text = " - (BELUM)"
+                                    unlftsuccess2.visibility = View.VISIBLE
+                                    tvVaksin2.text = " - "
+                                    statVaksin2.text = "BELUM"
+                                    unsuccessVaksin2.visibility = View.VISIBLE
                                 }
 
 

@@ -2,7 +2,9 @@ package com.macan.guestbookkemendagri
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -17,6 +19,7 @@ class DestinationAdapter(var context: Context, var sourceData: List<ListDestinat
 
     private val detailLayoutWrappers : ArrayList<LinearLayout> = ArrayList()
     private val detailTextViews : ArrayList<TextView> = ArrayList()
+    private val detailImageViews : ArrayList<ImageView> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -24,7 +27,7 @@ class DestinationAdapter(var context: Context, var sourceData: List<ListDestinat
             ListDestinationItem.TYPE_PRIMARY ->
                 PrimaryViewHolder(PrimaryDestinationItemBinding.inflate(layoutInflater))
             else ->
-                DetailViewHolder(DetailDestinationItemBinding.inflate(layoutInflater))
+                DetailViewHolder(DetailDestinationItemBinding.inflate(layoutInflater, parent,false ))
         }
     }
 
@@ -38,18 +41,30 @@ class DestinationAdapter(var context: Context, var sourceData: List<ListDestinat
         fun bind(item: DetailDestinationItem){
             detailLayoutWrappers.add(binding.linearLayoutWrapper)
             detailTextViews.add(binding.tvDetail)
+            detailImageViews.add(binding.first)
 
             binding.tvDetail.text= item.name
 
+//            binding.tvDetail.text= item.name
+//            val boundingBoxLayoutParams = binding.linearLayoutWrapper.layoutParams
+//            boundingBoxLayoutParams.width = LinearLayout.LayoutParams.MATCH_PARENT
+//            boundingBoxLayoutParams.height = LinearLayout.LayoutParams.MATCH_PARENT
+//            binding.linearLayoutWrapper.layoutParams = boundingBoxLayoutParams
+//
             binding.linearLayoutWrapper.setOnClickListener{
                 for(detailLayoutWrapper in detailLayoutWrappers){
-                    detailLayoutWrapper.setBackgroundColor(context.resources.getColor(R.color.design_default_color_background))
+                    detailLayoutWrapper.setBackgroundResource(R.drawable.bg_detail)
+
                 }
                 for(detailTextView in detailTextViews){
-                    detailTextView.setTextColor(context.resources.getColor(R.color.default_text_view_color))
+                    detailTextView.setTextColor(context.resources.getColor(R.color.irul_text))
+                }
+                for(detailImageView in detailImageViews){
+                    detailImageView.setColorFilter(context.resources.getColor(R.color.irul_icon))
                 }
 
                 binding.linearLayoutWrapper.setBackgroundColor(context.resources.getColor(R.color.teal_700))
+                binding.first.setColorFilter(context.resources.getColor(R.color.white))
                 binding.tvDetail.setTextColor(context.resources.getColor(R.color.white))
                 onDetailSelected.invoke(item)
 

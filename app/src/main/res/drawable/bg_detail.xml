@@ -4,13 +4,12 @@
     android:layout_width="wrap_content">
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="5dp" />
-<!--            <stroke-->
-<!--                android:width="2dp"-->
-<!--                android:color="#949494"-->
-<!--                />-->
+            <corners android:radius="20dp" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/irul_border_blue"/>
             <solid
-                android:color="@color/orange"/>
+                android:color="@color/irul_blue"/>
         </shape>
     </item>
 </selector>
