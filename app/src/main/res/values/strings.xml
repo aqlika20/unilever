@@ -1,5 +1,20 @@
 <resources>
-    <string name="app_name">Buku Tamu DITJEN DUKCAPIL</string>
+    <string name="app_name">FR UniLever</string>
+    <string name="choose">Choose...</string>
+
+    <string-array name="type_identity">
+        <item>Choose...</item>
+        <item>Nomor Induk Pegawai</item>
+        <item>KTP</item>
+    </string-array>
+
+    <string-array name="role">
+        <item>Choose...</item>
+        <item>Visitor</item>
+        <item>Subcon</item>
+        <item>Employee</item>
+    </string-array>
+
     <string name="loading">loading...</string>
     <string name="detail">Detail</string>
     <string name="nomor_telepon">Nomor Telepon</string>

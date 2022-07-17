@@ -7,19 +7,33 @@ import retrofit2.http.*
 
 interface ApiService {
 
+    // post image capture
     @FormUrlEncoded
-    @POST("find-guest")
+    @POST("/api/attendances/signin")
     fun findGuest(
-        @Field("face") face: String
+        @Field("photo") photo: String
     ): Call<ResponseBody>
 
+
+
+
+
+
+
+    // data absen
     @FormUrlEncoded
-    @POST("insert-guest")
-    fun insertGuest(
-            @Field("nik") nik: String,
-            @Field("phone") phone: String,
-            @Field("destination_detail") destinationDetail: Int
+    @POST("/api/persons/register")
+    fun submitUserData(
+            @Field("name") name: String,
+            @Field("identity_type_id") identity_type_id: String,
+            @Field("unique_identity_number") unique_identity_number: String,
+            @Field("photo") photo: String,
+            @Field("role") role: String,
     ): Call<ResponseBody>
+
+
+
+
 
     //liveness api
     @Headers("Content-Type: application/json")

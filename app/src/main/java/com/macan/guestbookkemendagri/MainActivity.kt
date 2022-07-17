@@ -16,9 +16,11 @@ import android.media.Image
 import android.media.ImageReader
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings.Secure
 import android.util.Log
 import android.util.Size
 import android.view.Surface
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +30,7 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.macan.guestbookkemendagri.captureframecomponent.*
 import com.macan.guestbookkemendagri.helper.Helper
+import com.macan.guestbookkemendagri.helper.MyApp.Companion.getContext
 import com.macan.guestbookkemendagri.network.RetrofitClient
 import kotlinx.coroutines.*
 import okhttp3.ResponseBody
@@ -39,7 +42,6 @@ import retrofit2.Response
 import java.io.IOException
 import java.lang.Runnable
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
@@ -49,6 +51,12 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     var job: Job? = null
 
     var methodTitle: TextView? = null
+    var deviceName: TextView? = null
+
+    var name: TextView? = null
+    var noIdentity: TextView? = null
+    var typeIdentity: TextView? = null
+    var role: TextView? = null
 
     var previewHeight = 0
     var previewWidth = 0
@@ -65,6 +73,8 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     private var closeActivity = false
     private var recursiveRunning = false
     private var boundingBoxFrameLayout : BoundingBoxFrameLayout? = null
+    private var btnRegister: Button? = null
+
     var frameContainer : FrameLayout ? = null
 
     private var activity: Activity? = null
@@ -77,6 +87,11 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     var selectedMethod: Int = 0
     var methodFinished: Boolean = false
 
+    var nama : String = ""
+    var no_identity : String = ""
+    var type_identity : String = ""
+    var str_role : String = ""
+
     private var graphicOverlay: GraphicOverlay? = null
 
 
@@ -84,6 +99,11 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
     // Max height (portrait mode)
     private var mImageMaxHeight: Int? = null
+
+    private val android_id = Secure.getString(
+        getContext().getContentResolver(),
+        Secure.ANDROID_ID
+    )
 
 
     companion object{
@@ -99,17 +119,41 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         supportActionBar?.setCustomView(R.layout.toolbar)
         activity = this
 
+
+
         methodTitle = findViewById(R.id.methodTitle)
         frameContainer = findViewById(R.id.container)
         graphicOverlay = findViewById(R.id.graphic_overlay)
+        deviceName = findViewById(R.id.deviceName)
+        btnRegister = findViewById(R.id.btnRegister)
+
+        name = findViewById(R.id.name)
+        noIdentity = findViewById(R.id.noIdentity)
+        typeIdentity = findViewById(R.id.typeIdentity)
+        role = findViewById(R.id.role)
+
+//        deviceName!!.text = "Device ID : " + android_id
+
+        name!!.text = "Name : " + nama
+        noIdentity!!.text = "No Identity : " + no_identity
+        typeIdentity!!.text = "Type Identity : " + type_identity
+        role!!.text = "Role : " + str_role
 
         boundingBoxFrameLayout = findViewById(R.id.boundingBoxFrame)
+
+
 
         optionsFaceDetector = FaceDetectorOptions.Builder()
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
             .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
             .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
             .build()
+
+        btnRegister!!.setOnClickListener{
+            val intent = Intent(this@MainActivity, RegisterActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         faceDetector = FaceDetection.getClient(optionsFaceDetector as FaceDetectorOptions)
 
@@ -127,6 +171,14 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         }
 
 
+//        val builder = AlertDialog.Builder(activity)
+//        builder.setMessage("Mohon menunjukkan wajah di kamera.")
+//        builder.setCancelable(false)
+//        builder.setPositiveButton("OK") { dialog, which -> checkLiveness() }
+//        val dialog = builder.create()
+//        dialog.setCanceledOnTouchOutside(false)
+//        dialog.show()
+
 
         initiateMethod()
     }
@@ -141,9 +193,100 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     private fun initiateMethod(){
         recursiveRunning = false
         if(methodFinished){
-            val intent = Intent(this@MainActivity, DestinationFormActivity::class.java)
-            intent.putExtra("image", Helper.encodeImage(selectedImage!!))
-            startActivity(intent)
+//            Helper.toastMessage(this@MainActivity, Helper.encodeImage(selectedImage!!))
+//            Log.i("Cameraaaaa", Helper.encodeImage(selectedImage!!))
+            RetrofitClient.instance.findGuest(Helper.encodeImage(selectedImage!!)).enqueue(object :
+                Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) = if (response.isSuccessful) {
+
+
+                    try {
+                        val result = JSONObject(response.body()!!.string())
+                        val message: String = result.getString("message")
+
+//                        initiateMethod()
+                        val i = Intent(
+                            this@MainActivity,
+                            MainActivity::class.java
+                        )
+                        startActivity(i)
+
+                        Helper.toastMessage(this@MainActivity, message)
+
+//                        val nama: String = result.getString("name")
+//                        val uniqeu_identity_number: String = result.getString("unique_identity_number")
+//                        val identity_type_name: String = result.getString("identity_type_name")
+//                        val role_name: String = result.getString("role_name")
+
+//                        val message: String = result.getString("message")
+//                        val message: String = result.getString("message")
+
+//                        Helper.toastMessage(this@MainActivity, "yayayayya" + nama + uniqeu_identity_number + identity_type_name + role_name)
+//                        Helper.toastMessage(this@MainActivity, Helper.encodeImage(selectedImage!!))
+
+//                        nama = result.getString("name")
+//                        no_identity = result.getString("uniqeu_identity_number")
+//                        type_identity = result.getString("identity_type_name")
+//                        str_role = result.getString("role_name")
+
+
+
+
+
+
+
+                    } catch (e: JSONException) {
+                        Log.i("ERROR1", e.message.toString())
+                        e.printStackTrace()
+                    } catch (e: IOException) {
+                        Log.i("ERROR2", e.message.toString())
+                        e.printStackTrace()
+                    }
+                } else {
+                    try {
+                        val err = JSONObject(response.errorBody()?.string())
+
+                        val message = err.getString("message")
+                        Log.i("ERROR RESPONSE", err.toString())
+
+                        Helper.alertDialog(
+                            this@MainActivity,
+                            message
+                        )
+
+
+                    } catch (e: JSONException) {
+                        Log.i("ERROR3", e.message.toString())
+                        e.printStackTrace()
+                    } catch (e: IOException) {
+                        Log.i("ERROR4", e.message.toString())
+                        e.printStackTrace()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.i("ERROR5", t.message.toString())
+                }
+
+            })
+//            initiateMethod()
+//            val i = Intent(
+//                this@MainActivity,
+//                MainActivity::class.java
+//            )
+//            startActivity(i)
+
+//            Helper.toastMessage(this@MainActivity, "Ini Pesan : " + pesan)
+
+//            Helper.toastMessage(this@MainActivity, "Ini Nama : " + nama)
+
+//            val intent = Intent(this@MainActivity, DestinationFormActivity::class.java)
+//            intent.putExtra("image", Helper.encodeImage(selectedImage!!))
+//            startActivity(intent)
+//            finish()
         }else{
             //initiate liveness method here.
             if (listMethod.isEmpty()){
@@ -154,7 +297,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 //                listMethod.add(Helper.METHOD_EYE_LEFT)
 //                listMethod.add(Helper.METHOD_EYE_RIGHT)
 
-                listMethod.shuffle()
+//                listMethod.shuffle()
                 listMethod.add(0, Helper.METHOD_FACE)
                 return initiateMethod()
             }else{
@@ -172,27 +315,27 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
             Helper.METHOD_FACE -> {
                 msg = "Mohon menunjukkan wajah di kamera."
             }
-            Helper.METHOD_MOUTH -> {
-                msg = "Mohon membuka mulut anda."
-            }
-            Helper.METHOD_EYES -> {
-                msg = "Mohon memejamkan mata anda."
-            }
-            Helper.METHOD_HEAD_RIGHT -> {
-                msg = "Mohon mengarahkan wajah ke kanan."
-            }
-            Helper.METHOD_HEAD_LEFT -> {
-                msg = "Mohon mengarahkan wajah ke kiri."
-            }
-            Helper.METHOD_EYE_LEFT -> {
-                msg = "Mohon pejamkan mata kiri anda."
-            }
-            Helper.METHOD_EYE_RIGHT -> {
-                msg = "Mohon pejamkan mata kanan anda."
-            }
+//            Helper.METHOD_MOUTH -> {
+//                msg = "Mohon membuka mulut anda."
+//            }
+//            Helper.METHOD_EYES -> {
+//                msg = "Mohon memejamkan mata anda."
+//            }
+//            Helper.METHOD_HEAD_RIGHT -> {
+//                msg = "Mohon mengarahkan wajah ke kanan."
+//            }
+//            Helper.METHOD_HEAD_LEFT -> {
+//                msg = "Mohon mengarahkan wajah ke kiri."
+//            }
+//            Helper.METHOD_EYE_LEFT -> {
+//                msg = "Mohon pejamkan mata kiri anda."
+//            }
+//            Helper.METHOD_EYE_RIGHT -> {
+//                msg = "Mohon pejamkan mata kanan anda."
+//            }
         }
 
-        methodTitle!!.text = msg
+//        methodTitle!!.text = msg
 
         val builder = AlertDialog.Builder(activity)
         builder.setMessage(msg)
@@ -267,12 +410,11 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         recursiveRunning = true
         if(closeActivity){
             destroyActivity()
-        }else{
+        }else {
             val encoded = Helper.encodeImage(rgbFrameBitmap!!)
             val paramObject = JsonObject()
 
             paramObject.addProperty("Image", encoded)
-
             when(method){
                 Helper.METHOD_FACE -> {
                     Log.i("Tracking", "FACE")
@@ -283,45 +425,53 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                             if (closeActivity) {
                                 destroyActivity()
                             } else {
-                                val rotatedBitmap = resizeBitmap(Helper.rotateBitmap(rgbFrameBitmap!!, -90F)!!)
-                                val image = InputImage.fromBitmap(rotatedBitmap, 0) // wajib diputer dulu.
+                                val rotatedBitmap =
+                                    resizeBitmap(Helper.rotateBitmap(rgbFrameBitmap!!, -90F)!!)
+                                val image =
+                                    InputImage.fromBitmap(rotatedBitmap, 0) // wajib diputer dulu.
 
                                 faceDetector.process(image)
-                                        .addOnSuccessListener { faces ->
-                                            graphicOverlay!!.clear()
-                                            Log.i("faces count", faces.size.toString())
-                                            if (faces.size == 1) {
-                                                for (face in faces) {
-                                                    val bounds = face.boundingBox
-                                                    Log.i("bounds", "left = ${bounds.left}, top = ${bounds.top}, right = ${bounds.right}, bot = ${bounds.bottom}")
+                                    .addOnSuccessListener { faces ->
+                                        graphicOverlay!!.clear()
+                                        Log.i("faces count", faces.size.toString())
+                                        if (faces.size == 1) {
+                                            for (face in faces) {
+                                                val bounds = face.boundingBox
+                                                Log.i(
+                                                    "bounds",
+                                                    "left = ${bounds.left}, top = ${bounds.top}, right = ${bounds.right}, bot = ${bounds.bottom}"
+                                                )
 
-                                                    val faceGraphic = FaceContourGraphic(graphicOverlay)
-                                                    graphicOverlay!!.add(faceGraphic)
-                                                    faceGraphic.updateFace(face)
+                                                val faceGraphic = FaceContourGraphic(graphicOverlay)
+                                                graphicOverlay!!.add(faceGraphic)
+                                                faceGraphic.updateFace(face)
 
-                                                    if (bounds.left > BoundingBoxFrameLayout.left && bounds.top > BoundingBoxFrameLayout.top && bounds.right < BoundingBoxFrameLayout.right && bounds.bottom < BoundingBoxFrameLayout.bottom && face.rightEyeOpenProbability != null && face.leftEyeOpenProbability != null) {
-                                                        Log.i("capturedInFrame", "Yes")
+                                                if (bounds.left > BoundingBoxFrameLayout.left && bounds.top > BoundingBoxFrameLayout.top && bounds.right < BoundingBoxFrameLayout.right && bounds.bottom < BoundingBoxFrameLayout.bottom && face.rightEyeOpenProbability != null && face.leftEyeOpenProbability != null) {
+                                                    Log.i("capturedInFrame", "Yes")
 
-                                                        if(face.rightEyeOpenProbability > 0.60 && face.leftEyeOpenProbability > 0.60){
-                                                            Log.i("eyesOpen", "Yes")
-                                                            val croppedBmp: Bitmap = Bitmap.createBitmap(rotatedBitmap, bounds.left, bounds.top, bounds.width(), bounds.height()) //crop the face
-                                                            selectedImage = croppedBmp
-                                                            methodFinished(currMethod)
-                                                            postInferenceCallback!!.run()
-                                                        }
-//
-
+                                                    if (face.rightEyeOpenProbability > 0.60 && face.leftEyeOpenProbability > 0.60) {
+                                                        Log.i("eyesOpen", "Yes")
+                                                        //                                       val croppedBmp: Bitmap = Bitmap.createBitmap(rotatedBitmap, bounds.left, bounds.top, bounds.width(), bounds.height()) //crop the face
+                                                        selectedImage = rgbFrameBitmap!!
+                                                        methodFinished(currMethod)
+                                                        postInferenceCallback!!.run()
                                                     }
+    //
 
                                                 }
-//
-                                            }
 
+                                            }
+    //
+                                        } else if (faces.size > 1) {
+                                            Helper.toastMessage(this@MainActivity, "Lebih dari 2 Muka")
+                                            onBackPressed()
                                         }
-                                        .addOnFailureListener {
-                                            // Task failed with an exception
-                                            Log.e("errorFaceRecog", it.message.toString())
-                                        }
+
+                                    }
+                                    .addOnFailureListener {
+                                        // Task failed with an exception
+                                        Log.e("errorFaceRecog", it.message.toString())
+                                    }
                             }
                             delay(800)
                         }
@@ -329,341 +479,345 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
 
                 }
-                Helper.METHOD_MOUTH -> {
-                    Log.i("Tracking", "MOUTH")
-                    val currMethod = Helper.METHOD_MOUTH
-                    /*
-                        {
-                            Image: base64
-                        }
-
-                        {
-                            result: True / False
-                        }
-                     */
-
-                    RetrofitClient.instance.checkMouth(paramObject).enqueue(object :
-                            Callback<ResponseBody> {
-                        override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: Response<ResponseBody>
-                        ) = if (response.isSuccessful) {
-                            try {
-                                val result = JSONObject(response.body()!!.string())
-                                val data: String = result.getString("result")
-
-                                Log.i("Result Mouth", data)
-                                if (data == "True") {
-                                    methodFinished(currMethod)
-                                } else {
-                                    checkLiveness(currMethod)
-                                }
-                            } catch (e: JSONException) {
-                                Log.i("ERROR1", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR2", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        } else {
-                            try {
-                                val err = response.errorBody()?.string()
-                                Log.i("ERROR RESPONSE", err.toString())
-                                Helper.alertDialog(
-                                        activity!!,
-                                        err
-                                )
-                            } catch (e: JSONException) {
-                                Log.i("ERROR3", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR4", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Log.i("ERROR5", t.message.toString())
-                            checkLiveness(currMethod)
-                        }
-
-                    })
-                }
-                Helper.METHOD_EYES -> {
-                    Log.i("Tracking", "EYES")
-                    val currMethod = Helper.METHOD_EYES
-                    RetrofitClient.instance.checkEyes(paramObject).enqueue(object :
-                            Callback<ResponseBody> {
-                        override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: Response<ResponseBody>
-                        ) = if (response.isSuccessful) {
-                            try {
-                                val result = JSONObject(response.body()!!.string())
-                                val data: String = result.getString("result")
-
-                                Log.i("Result Eyes", data)
-                                if (data == "True") {
-                                    methodFinished(currMethod)
-                                } else {
-                                    checkLiveness(currMethod)
-                                }
-                            } catch (e: JSONException) {
-                                Log.i("ERROR1", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR2", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        } else {
-                            try {
-                                val err = response.errorBody()?.string()
-                                Log.i("ERROR RESPONSE", err.toString())
-                                Helper.alertDialog(
-                                        activity!!,
-                                        err
-                                )
-                            } catch (e: JSONException) {
-                                Log.i("ERROR3", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR4", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Log.i("ERROR5", t.message.toString())
-                            checkLiveness(currMethod)
-                        }
-
-                    })
-                }
-                Helper.METHOD_HEAD_RIGHT -> {
-                    Log.i("Tracking", "HEAD RIGHT")
-                    val currMethod = Helper.METHOD_HEAD_RIGHT
-                    RetrofitClient.instance.checkHeadRight(paramObject).enqueue(object :
-                            Callback<ResponseBody> {
-                        override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: Response<ResponseBody>
-                        ) = if (response.isSuccessful) {
-                            try {
-                                val result = JSONObject(response.body()!!.string())
-                                val data: String = result.getString("result")
-
-                                Log.i("Result Head Right", data)
-                                if (data == "True") {
-                                    methodFinished(currMethod)
-                                } else {
-                                    checkLiveness(currMethod)
-                                }
-                            } catch (e: JSONException) {
-                                Log.i("ERROR1", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR2", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        } else {
-                            try {
-                                val err = response.errorBody()?.string()
-                                Log.i("ERROR RESPONSE", err.toString())
-                                Helper.alertDialog(
-                                        activity!!,
-                                        err
-                                )
-                            } catch (e: JSONException) {
-                                Log.i("ERROR3", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR4", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Log.i("ERROR5", t.message.toString())
-                            checkLiveness(currMethod)
-                        }
-
-                    })
-                }
-                Helper.METHOD_HEAD_LEFT -> {
-                    Log.i("Tracking", "HEAD LEFT")
-                    val currMethod = Helper.METHOD_HEAD_LEFT
-                    RetrofitClient.instance.checkHeadLeft(paramObject).enqueue(object :
-                            Callback<ResponseBody> {
-                        override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: Response<ResponseBody>
-                        ) = if (response.isSuccessful) {
-                            try {
-                                val result = JSONObject(response.body()!!.string())
-                                val data: String = result.getString("result")
-
-                                Log.i("Result Head Left", data)
-                                if (data == "True") {
-                                    methodFinished(currMethod)
-                                } else {
-                                    checkLiveness(currMethod)
-                                }
-                            } catch (e: JSONException) {
-                                Log.i("ERROR1", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR2", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        } else {
-                            try {
-                                val err = response.errorBody()?.string()
-                                Log.i("ERROR RESPONSE", err.toString())
-                                Helper.alertDialog(
-                                        activity!!,
-                                        err
-                                )
-                            } catch (e: JSONException) {
-                                Log.i("ERROR3", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR4", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Log.i("ERROR5", t.message.toString())
-                            checkLiveness(currMethod)
-                        }
-
-                    })
-                }
-                Helper.METHOD_EYE_LEFT -> {
-                    Log.i("Tracking", "EYE LEFT")
-                    val currMethod = Helper.METHOD_EYE_LEFT
-                    RetrofitClient.instance.checkEyeLeft(paramObject).enqueue(object :
-                            Callback<ResponseBody> {
-                        override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: Response<ResponseBody>
-                        ) = if (response.isSuccessful) {
-                            try {
-                                val result = JSONObject(response.body()!!.string())
-                                val data: String = result.getString("result")
-
-                                Log.i("Result Eye Left", data)
-                                if (data == "True") {
-                                    methodFinished(currMethod)
-                                } else {
-                                    checkLiveness(currMethod)
-                                }
-                            } catch (e: JSONException) {
-                                Log.i("ERROR1", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR2", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        } else {
-                            try {
-                                val err = response.errorBody()?.string()
-                                Log.i("ERROR RESPONSE", err.toString())
-                                Helper.alertDialog(
-                                        activity!!,
-                                        err
-                                )
-                            } catch (e: JSONException) {
-                                Log.i("ERROR3", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR4", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Log.i("ERROR5", t.message.toString())
-                            checkLiveness(currMethod)
-                        }
-
-                    })
-                }
-                Helper.METHOD_EYE_RIGHT -> {
-                    Log.i("Tracking", "EYE RIGHT")
-                    val currMethod = Helper.METHOD_EYE_RIGHT
-                    RetrofitClient.instance.checkEyeRight(paramObject).enqueue(object :
-                            Callback<ResponseBody> {
-                        override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: Response<ResponseBody>
-                        ) = if (response.isSuccessful) {
-                            try {
-                                val result = JSONObject(response.body()!!.string())
-                                val data: String = result.getString("result")
-
-                                Log.i("Result Eye Right", data)
-                                if (data == "True") {
-                                    methodFinished(currMethod)
-                                } else {
-                                    checkLiveness(currMethod)
-                                }
-                            } catch (e: JSONException) {
-                                Log.i("ERROR1", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR2", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        } else {
-                            try {
-                                val err = response.errorBody()?.string()
-                                Log.i("ERROR RESPONSE", err.toString())
-                                Helper.alertDialog(
-                                        activity!!,
-                                        err
-                                )
-                            } catch (e: JSONException) {
-                                Log.i("ERROR3", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            } catch (e: IOException) {
-                                Log.i("ERROR4", e.message.toString())
-                                e.printStackTrace()
-                                checkLiveness(currMethod)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            Log.i("ERROR5", t.message.toString())
-                            checkLiveness(currMethod)
-                        }
-
-                    })
-                }
             }
+
+//            when(method){
+
+//                Helper.METHOD_MOUTH -> {
+//                    Log.i("Tracking", "MOUTH")
+//                    val currMethod = Helper.METHOD_MOUTH
+//                    /*
+//                        {
+//                            Image: base64
+//                        }
+//
+//                        {
+//                            result: True / False
+//                        }
+//                     */
+//
+//                    RetrofitClient.instance.checkMouth(paramObject).enqueue(object :
+//                            Callback<ResponseBody> {
+//                        override fun onResponse(
+//                                call: Call<ResponseBody>,
+//                                response: Response<ResponseBody>
+//                        ) = if (response.isSuccessful) {
+//                            try {
+//                                val result = JSONObject(response.body()!!.string())
+//                                val data: String = result.getString("result")
+//
+//                                Log.i("Result Mouth", data)
+//                                if (data == "True") {
+//                                    methodFinished(currMethod)
+//                                } else {
+//                                    checkLiveness(currMethod)
+//                                }
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR1", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR2", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        } else {
+//                            try {
+//                                val err = response.errorBody()?.string()
+//                                Log.i("ERROR RESPONSE", err.toString())
+//                                Helper.alertDialog(
+//                                        activity!!,
+//                                        err
+//                                )
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR3", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR4", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                            Log.i("ERROR5", t.message.toString())
+//                            checkLiveness(currMethod)
+//                        }
+//
+//                    })
+//                }
+//                Helper.METHOD_EYES -> {
+//                    Log.i("Tracking", "EYES")
+//                    val currMethod = Helper.METHOD_EYES
+//                    RetrofitClient.instance.checkEyes(paramObject).enqueue(object :
+//                            Callback<ResponseBody> {
+//                        override fun onResponse(
+//                                call: Call<ResponseBody>,
+//                                response: Response<ResponseBody>
+//                        ) = if (response.isSuccessful) {
+//                            try {
+//                                val result = JSONObject(response.body()!!.string())
+//                                val data: String = result.getString("result")
+//
+//                                Log.i("Result Eyes", data)
+//                                if (data == "True") {
+//                                    methodFinished(currMethod)
+//                                } else {
+//                                    checkLiveness(currMethod)
+//                                }
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR1", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR2", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        } else {
+//                            try {
+//                                val err = response.errorBody()?.string()
+//                                Log.i("ERROR RESPONSE", err.toString())
+//                                Helper.alertDialog(
+//                                        activity!!,
+//                                        err
+//                                )
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR3", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR4", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                            Log.i("ERROR5", t.message.toString())
+//                            checkLiveness(currMethod)
+//                        }
+//
+//                    })
+//                }
+//                Helper.METHOD_HEAD_RIGHT -> {
+//                    Log.i("Tracking", "HEAD RIGHT")
+//                    val currMethod = Helper.METHOD_HEAD_RIGHT
+//                    RetrofitClient.instance.checkHeadRight(paramObject).enqueue(object :
+//                            Callback<ResponseBody> {
+//                        override fun onResponse(
+//                                call: Call<ResponseBody>,
+//                                response: Response<ResponseBody>
+//                        ) = if (response.isSuccessful) {
+//                            try {
+//                                val result = JSONObject(response.body()!!.string())
+//                                val data: String = result.getString("result")
+//
+//                                Log.i("Result Head Right", data)
+//                                if (data == "True") {
+//                                    methodFinished(currMethod)
+//                                } else {
+//                                    checkLiveness(currMethod)
+//                                }
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR1", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR2", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        } else {
+//                            try {
+//                                val err = response.errorBody()?.string()
+//                                Log.i("ERROR RESPONSE", err.toString())
+//                                Helper.alertDialog(
+//                                        activity!!,
+//                                        err
+//                                )
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR3", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR4", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                            Log.i("ERROR5", t.message.toString())
+//                            checkLiveness(currMethod)
+//                        }
+//
+//                    })
+//                }
+//                Helper.METHOD_HEAD_LEFT -> {
+//                    Log.i("Tracking", "HEAD LEFT")
+//                    val currMethod = Helper.METHOD_HEAD_LEFT
+//                    RetrofitClient.instance.checkHeadLeft(paramObject).enqueue(object :
+//                            Callback<ResponseBody> {
+//                        override fun onResponse(
+//                                call: Call<ResponseBody>,
+//                                response: Response<ResponseBody>
+//                        ) = if (response.isSuccessful) {
+//                            try {
+//                                val result = JSONObject(response.body()!!.string())
+//                                val data: String = result.getString("result")
+//
+//                                Log.i("Result Head Left", data)
+//                                if (data == "True") {
+//                                    methodFinished(currMethod)
+//                                } else {
+//                                    checkLiveness(currMethod)
+//                                }
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR1", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR2", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        } else {
+//                            try {
+//                                val err = response.errorBody()?.string()
+//                                Log.i("ERROR RESPONSE", err.toString())
+//                                Helper.alertDialog(
+//                                        activity!!,
+//                                        err
+//                                )
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR3", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR4", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                            Log.i("ERROR5", t.message.toString())
+//                            checkLiveness(currMethod)
+//                        }
+//
+//                    })
+//                }
+//                Helper.METHOD_EYE_LEFT -> {
+//                    Log.i("Tracking", "EYE LEFT")
+//                    val currMethod = Helper.METHOD_EYE_LEFT
+//                    RetrofitClient.instance.checkEyeLeft(paramObject).enqueue(object :
+//                            Callback<ResponseBody> {
+//                        override fun onResponse(
+//                                call: Call<ResponseBody>,
+//                                response: Response<ResponseBody>
+//                        ) = if (response.isSuccessful) {
+//                            try {
+//                                val result = JSONObject(response.body()!!.string())
+//                                val data: String = result.getString("result")
+//
+//                                Log.i("Result Eye Left", data)
+//                                if (data == "True") {
+//                                    methodFinished(currMethod)
+//                                } else {
+//                                    checkLiveness(currMethod)
+//                                }
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR1", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR2", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        } else {
+//                            try {
+//                                val err = response.errorBody()?.string()
+//                                Log.i("ERROR RESPONSE", err.toString())
+//                                Helper.alertDialog(
+//                                        activity!!,
+//                                        err
+//                                )
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR3", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR4", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                            Log.i("ERROR5", t.message.toString())
+//                            checkLiveness(currMethod)
+//                        }
+//
+//                    })
+//                }
+//                Helper.METHOD_EYE_RIGHT -> {
+//                    Log.i("Tracking", "EYE RIGHT")
+//                    val currMethod = Helper.METHOD_EYE_RIGHT
+//                    RetrofitClient.instance.checkEyeRight(paramObject).enqueue(object :
+//                            Callback<ResponseBody> {
+//                        override fun onResponse(
+//                                call: Call<ResponseBody>,
+//                                response: Response<ResponseBody>
+//                        ) = if (response.isSuccessful) {
+//                            try {
+//                                val result = JSONObject(response.body()!!.string())
+//                                val data: String = result.getString("result")
+//
+//                                Log.i("Result Eye Right", data)
+//                                if (data == "True") {
+//                                    methodFinished(currMethod)
+//                                } else {
+//                                    checkLiveness(currMethod)
+//                                }
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR1", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR2", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        } else {
+//                            try {
+//                                val err = response.errorBody()?.string()
+//                                Log.i("ERROR RESPONSE", err.toString())
+//                                Helper.alertDialog(
+//                                        activity!!,
+//                                        err
+//                                )
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR3", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR4", e.message.toString())
+//                                e.printStackTrace()
+//                                checkLiveness(currMethod)
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                            Log.i("ERROR5", t.message.toString())
+//                            checkLiveness(currMethod)
+//                        }
+//
+//                    })
+//                }
+//            }
         }
     }
 
@@ -706,6 +860,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                 this,
                 R.layout.camera_fragment,
                 Size(640, 480)
+
         )
         camera2Fragment.setCamera(cameraId)
         fragment = camera2Fragment

@@ -40,7 +40,7 @@ import java.util.*
 class Helper {
 
     companion object{
-        val BASE_URL = "http://api-guestbook-kemendagri.macantech.asia/api/"
+        val BASE_URL = "http://192.168.1.237:8000"
 
         val PROFILE_PERSONAL_REQUEST_CODE = 1
 

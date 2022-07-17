@@ -44,10 +44,10 @@ class BoundingBoxFrameLayout : FrameLayout {
         boxPaint.style = Paint.Style.STROKE
         boxPaint.strokeWidth = 5.0f
 
-        BoundingBoxFrameLayout.left = (width * 0.1).toFloat()
-        BoundingBoxFrameLayout.top = (height * 0.1).toFloat()
-        BoundingBoxFrameLayout.right = (width * 0.9).toFloat()
-        BoundingBoxFrameLayout.bottom = (height * 0.9).toFloat()
+        BoundingBoxFrameLayout.left = (width * 0.2).toFloat()
+        BoundingBoxFrameLayout.top = (height * 0.2).toFloat()
+        BoundingBoxFrameLayout.right = (width * 0.8).toFloat()
+        BoundingBoxFrameLayout.bottom = (height * 0.8).toFloat()
 
 
 

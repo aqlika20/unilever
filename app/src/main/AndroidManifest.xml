@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature android:name="android.hardware.Camera.autofocus" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -21,12 +22,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GuestbookKemendagri"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.GuestbookKemendagriNoTitleBar"/>
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="face" />
 
-        <activity android:name=".DestinationFormActivity"/>
+        <activity android:name=".DestinationFormActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

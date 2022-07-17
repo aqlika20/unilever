@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".RegisterActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="10dp">
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:id="@+id/linear_layout_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/logoWrapper"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="100dp"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.0"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.109">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="130dp"-->
+<!--                    android:layout_height="92dp"-->
+<!--                    android:src="@drawable/direktorat" />-->
+                <!--        <ImageView-->
+                <!--            android:layout_width="40dp"-->
+                <!--            android:layout_height="92dp"-->
+                <!--            android:src="@drawable/ic_baseline_clear_24"/>-->
+<!--                <ImageView-->
+<!--                    android:layout_width="130dp"-->
+<!--                    android:layout_height="92dp"-->
+<!--                    android:src="@drawable/kemkes" />-->
+
+
+<!--            </LinearLayout>-->
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Register"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logoWrapper"
+                app:layout_constraintVertical_bias="0.029" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView1"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="50dp"-->
+<!--                android:layout_marginRight="50dp"-->
+<!--                android:fontFamily="sans-serif-black"-->
+<!--                android:text="@string/kemkes"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="15dp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView"-->
+<!--                app:layout_constraintVertical_bias="0.0" />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="95sp"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif"
+                            android:text="@string/nama"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="bottom" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/nama"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/bg_text"
+                android:fontFamily="sans-serif"
+                android:hint="@string/nama"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:maxLength="16"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.002"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif"
+                            android:text="Type Identitas"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="bottom" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="20dp"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                &lt;!&ndash; Inside text input layout add-->
+<!--                      an auto complete text view-->
+<!--                        and make its input type to none&ndash;&gt;-->
+<!--                <AutoCompleteTextView-->
+<!--                    android:id="@+id/identity_type_id"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:inputType="none"-->
+<!--                    android:text="Choose..."-->
+<!--                    />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+            <Spinner
+                android:id="@+id/identity_type_id"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:background="@drawable/bg_text"/>
+
+<!--            <EditText-->
+<!--                android:id="@+id/identity_type_id"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginLeft="30dp"-->
+<!--                android:layout_marginRight="30dp"-->
+<!--                android:background="@drawable/bg_text"-->
+<!--                android:fontFamily="sans-serif"-->
+<!--                android:hint="Type Identitas"-->
+<!--                android:imeOptions="actionNext"-->
+<!--                android:inputType="text"-->
+<!--                android:maxLength="16"-->
+<!--                android:paddingLeft="20dp"-->
+<!--                android:paddingRight="20dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.002"-->
+<!--                tools:layout_editor_absoluteX="16dp" />-->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif"
+                            android:text="Nomor Identitas"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="bottom" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/unique_identity_number"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/bg_text"
+                android:fontFamily="sans-serif"
+                android:hint="Nomor Identitas"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="16"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.002"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="sans-serif"
+                    android:text="Photo Selfi"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nik"
+                    app:layout_constraintVertical_bias="0.016" />
+
+
+                <ImageView
+                    android:id="@+id/registerGoToFaceRecog"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="76dp"
+                    android:src="@drawable/ic_baseline_photo_camera_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/textView6"
+                    app:layout_constraintTop_toBottomOf="@+id/nik"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/photo"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/bg_selfie"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6"
+                    app:layout_constraintVertical_bias="0.0" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="sans-serif"
+                            android:text="Role"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="bottom" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/role"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:background="@drawable/bg_text"/>
+
+<!--            <EditText-->
+<!--                android:id="@+id/role"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginLeft="30dp"-->
+<!--                android:layout_marginRight="30dp"-->
+<!--                android:background="@drawable/bg_text"-->
+<!--                android:fontFamily="sans-serif"-->
+<!--                android:hint="Role"-->
+<!--                android:imeOptions="actionNext"-->
+<!--                android:inputType="text"-->
+<!--                android:maxLength="16"-->
+<!--                android:paddingLeft="20dp"-->
+<!--                android:paddingRight="20dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.002"-->
+<!--                tools:layout_editor_absoluteX="16dp" />-->
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Register"
+                android:drawableRight="@drawable/ic_baseline_navigate_next_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phone"
+                app:layout_constraintVertical_bias="0.333" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

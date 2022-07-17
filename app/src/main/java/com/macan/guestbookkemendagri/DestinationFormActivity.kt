@@ -2,12 +2,10 @@ package com.macan.guestbookkemendagri
 
 import android.annotation.SuppressLint
 import android.app.ActionBar
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.macan.guestbookkemendagri.databinding.ActivityDestinationFormBinding
@@ -31,6 +29,7 @@ class DestinationFormActivity : AppCompatActivity() {
         ActivityDestinationFormBinding.inflate(layoutInflater)
     }
 
+    //get image from putextra
     private val base64Image: String? by lazy {
         intent.getStringExtra("image")
     }
@@ -72,7 +71,9 @@ class DestinationFormActivity : AppCompatActivity() {
                     it.layoutManager = linearLayoutManager
 
                 }
+//                photoProfile.setImageBitmap(Helper.decodeImage(base64Image!!))
 
+                // post data to database
                 RetrofitClient.instance.findGuest(base64Image!!).enqueue(object :
                         Callback<ResponseBody> {
                     override fun onResponse(
@@ -201,6 +202,15 @@ class DestinationFormActivity : AppCompatActivity() {
         }
     }
 
+    private fun backToLobby(){
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        backToLobby()
+    }
 
     private fun insertGuest(){
         with(binding){
@@ -211,59 +221,59 @@ class DestinationFormActivity : AppCompatActivity() {
                 loadingDialog.show()
                 val noTelp = etNoTelp.text.toString().trim()
 
-                RetrofitClient.instance.insertGuest(nik, noTelp, selectedDetailId!!).enqueue(object:
-                        Callback<ResponseBody> {
-                    override fun onResponse(
-                            call: Call<ResponseBody>,
-                            response: Response<ResponseBody>
-                    ) {
-                        if (response.isSuccessful) {
-                            try {
-                                val result = JSONObject(response.body()!!.string())
-                                Helper.toastMessage(this@DestinationFormActivity, "Data Berhasil Dimasukkan!")
-                                finish()
-
-                            } catch (e: JSONException) {
-                                Log.i("ERROR1", e.message.toString())
-                                e.printStackTrace()
-                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
-                                loadingDialog.dismiss()
-                            } catch (e: IOException) {
-                                Log.i("ERROR2", e.message.toString())
-                                e.printStackTrace()
-                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
-                                loadingDialog.dismiss()
-                            }
-                        } else {
-                            try {
-                                val err = JSONObject(response.errorBody()!!.string())
-                                val message = err.getString("message")
-                                Helper.alertDialog(
-                                        this@DestinationFormActivity,
-                                        message
-                                )
-                                loadingDialog.dismiss()
-
-                            } catch (e: JSONException) {
-                                Log.i("ERROR3", e.message.toString())
-                                e.printStackTrace()
-                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
-                                loadingDialog.dismiss()
-                            } catch (e: IOException) {
-                                Log.i("ERROR4", e.message.toString())
-                                e.printStackTrace()
-                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
-                                loadingDialog.dismiss()
-                            }
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ResponseBody>, e: Throwable) {
-                        Log.i("ERROR5", e.message.toString())
-                        Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
-                        loadingDialog.dismiss()
-                    }
-                })
+//                RetrofitClient.instance.insertGuest(nik, noTelp, selectedDetailId!!).enqueue(object:
+//                        Callback<ResponseBody> {
+//                    override fun onResponse(
+//                            call: Call<ResponseBody>,
+//                            response: Response<ResponseBody>
+//                    ) {
+//                        if (response.isSuccessful) {
+//                            try {
+//                                val result = JSONObject(response.body()!!.string())
+//                                Helper.toastMessage(this@DestinationFormActivity, "Data Berhasil Dimasukkan!")
+//                                backToLobby()
+//
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR1", e.message.toString())
+//                                e.printStackTrace()
+//                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
+//                                loadingDialog.dismiss()
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR2", e.message.toString())
+//                                e.printStackTrace()
+//                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
+//                                loadingDialog.dismiss()
+//                            }
+//                        } else {
+//                            try {
+//                                val err = JSONObject(response.errorBody()!!.string())
+//                                val message = err.getString("message")
+//                                Helper.alertDialog(
+//                                        this@DestinationFormActivity,
+//                                        message
+//                                )
+//                                loadingDialog.dismiss()
+//
+//                            } catch (e: JSONException) {
+//                                Log.i("ERROR3", e.message.toString())
+//                                e.printStackTrace()
+//                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
+//                                loadingDialog.dismiss()
+//                            } catch (e: IOException) {
+//                                Log.i("ERROR4", e.message.toString())
+//                                e.printStackTrace()
+//                                Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
+//                                loadingDialog.dismiss()
+//                            }
+//                        }
+//                    }
+//
+//                    override fun onFailure(call: Call<ResponseBody>, e: Throwable) {
+//                        Log.i("ERROR5", e.message.toString())
+//                        Helper.toastMessage(this@DestinationFormActivity , e.message.toString())
+//                        loadingDialog.dismiss()
+//                    }
+//                })
             }
         }
     }
