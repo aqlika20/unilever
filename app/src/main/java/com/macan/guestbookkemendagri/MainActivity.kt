@@ -14,6 +14,7 @@ import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
 import android.media.Image
 import android.media.ImageReader
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings.Secure
@@ -23,6 +24,7 @@ import android.view.Surface
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.JsonObject
 import com.google.mlkit.vision.common.InputImage
@@ -41,7 +43,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.lang.Runnable
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
@@ -54,8 +59,8 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     var deviceName: TextView? = null
 
     var name: TextView? = null
-    var noIdentity: TextView? = null
-    var typeIdentity: TextView? = null
+    var tgl: TextView? = null
+//    var typeIdentity: TextView? = null
     var role: TextView? = null
 
     var previewHeight = 0
@@ -110,6 +115,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         var LIVENESS_REQUEST_CODE = 1
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,20 +134,19 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         btnRegister = findViewById(R.id.btnRegister)
 
         name = findViewById(R.id.name)
-        noIdentity = findViewById(R.id.noIdentity)
-        typeIdentity = findViewById(R.id.typeIdentity)
+        tgl = findViewById(R.id.tgl)
+//        typeIdentity = findViewById(R.id.typeIdentity)
         role = findViewById(R.id.role)
 
 //        deviceName!!.text = "Device ID : " + android_id
 
-        name!!.text = "Name : " + nama
-        noIdentity!!.text = "No Identity : " + no_identity
-        typeIdentity!!.text = "Type Identity : " + type_identity
-        role!!.text = "Role : " + str_role
-
         boundingBoxFrameLayout = findViewById(R.id.boundingBoxFrame)
 
+//        val current = LocalDateTime.now()
+//        val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
+//        val formatted = current.format(formatter)
 
+//        tgl!!.text = formatted
 
         optionsFaceDetector = FaceDetectorOptions.Builder()
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
@@ -171,16 +176,16 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         }
 
 
-//        val builder = AlertDialog.Builder(activity)
-//        builder.setMessage("Mohon menunjukkan wajah di kamera.")
-//        builder.setCancelable(false)
-//        builder.setPositiveButton("OK") { dialog, which -> checkLiveness() }
-//        val dialog = builder.create()
-//        dialog.setCanceledOnTouchOutside(false)
-//        dialog.show()
+        val builder = AlertDialog.Builder(activity)
+        builder.setMessage("Mohon menunjukkan wajah di kamera.")
+        builder.setCancelable(false)
+        builder.setPositiveButton("OK") { dialog, which -> initiateMethod() }
+        val dialog = builder.create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
 
 
-        initiateMethod()
+
     }
 
     override fun onRestart() {
@@ -190,13 +195,16 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         startActivity(intent)
     }
 
+    private fun reInitiateMethod(){
+        methodFinished = false
+        initiateMethod()
+    }
     private fun initiateMethod(){
         recursiveRunning = false
         if(methodFinished){
-//            Helper.toastMessage(this@MainActivity, Helper.encodeImage(selectedImage!!))
-//            Log.i("Cameraaaaa", Helper.encodeImage(selectedImage!!))
             RetrofitClient.instance.findGuest(Helper.encodeImage(selectedImage!!)).enqueue(object :
                 Callback<ResponseBody> {
+                @RequiresApi(Build.VERSION_CODES.O)
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
@@ -206,13 +214,38 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                     try {
                         val result = JSONObject(response.body()!!.string())
                         val message: String = result.getString("message")
+                        val namaVal: String = result.getString("name")
+//                        val uniqeu_identity_number: String = result.getString("unique_identity_number")
+//                        val identity_type_name: String = result.getString("identity_type_name")
+                        val role_name: String = result.getString("role_name")
+                        val current = LocalDateTime.now()
+                        val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
+                        val formatted = current.format(formatter)
 
-//                        initiateMethod()
-                        val i = Intent(
-                            this@MainActivity,
-                            MainActivity::class.java
-                        )
-                        startActivity(i)
+//                        nama = namaVal
+//                        no_identity = uniqeu_identity_number
+//                        type_identity = identity_type_name
+//                        str_role = role_name
+
+                        name!!.setText(namaVal)
+                        role!!.setText(role_name)
+                        tgl!!.setText(formatted)
+
+//                        noIdentity!!.setText(uniqeu_identity_number)
+//                        typeIdentity!!.setText(identity_type_name)
+
+
+                        val timer = Timer("schedule", true);
+                        timer.schedule(3000) {
+                            name!!.setText(" - ")
+                            role!!.setText(" - ")
+                            tgl!!.setText(" - ")
+
+//                            noIdentity!!.setText(" - ")
+//                            typeIdentity!!.setText(" - ")
+                        }
+
+                        reInitiateMethod()
 
                         Helper.toastMessage(this@MainActivity, message)
 
@@ -233,16 +266,21 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 //                        str_role = result.getString("role_name")
 
 
-
-
-
-
-
                     } catch (e: JSONException) {
+                        Helper.toastMessage(
+                            this@MainActivity,
+                            e.message.toString()
+                        )
                         Log.i("ERROR1", e.message.toString())
+                        reInitiateMethod()
                         e.printStackTrace()
                     } catch (e: IOException) {
+                        Helper.toastMessage(
+                            this@MainActivity,
+                            e.message.toString()
+                        )
                         Log.i("ERROR2", e.message.toString())
+                        reInitiateMethod()
                         e.printStackTrace()
                     }
                 } else {
@@ -252,36 +290,43 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                         val message = err.getString("message")
                         Log.i("ERROR RESPONSE", err.toString())
 
-                        Helper.alertDialog(
+                        Helper.toastMessage(
                             this@MainActivity,
                             message
                         )
+                        reInitiateMethod()
 
 
                     } catch (e: JSONException) {
+                        Helper.toastMessage(
+                            this@MainActivity,
+                            e.message.toString()
+                        )
+
                         Log.i("ERROR3", e.message.toString())
+                        reInitiateMethod()
                         e.printStackTrace()
                     } catch (e: IOException) {
+                        Helper.toastMessage(
+                            this@MainActivity,
+                            e.message.toString()
+                        )
                         Log.i("ERROR4", e.message.toString())
+                        reInitiateMethod()
                         e.printStackTrace()
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.i("ERROR5", t.message.toString())
+                    Helper.toastMessage(
+                        this@MainActivity,
+                        t.message.toString()
+                    )
+                    reInitiateMethod()
                 }
 
             })
-//            initiateMethod()
-//            val i = Intent(
-//                this@MainActivity,
-//                MainActivity::class.java
-//            )
-//            startActivity(i)
-
-//            Helper.toastMessage(this@MainActivity, "Ini Pesan : " + pesan)
-
-//            Helper.toastMessage(this@MainActivity, "Ini Nama : " + nama)
 
 //            val intent = Intent(this@MainActivity, DestinationFormActivity::class.java)
 //            intent.putExtra("image", Helper.encodeImage(selectedImage!!))
@@ -302,7 +347,8 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                 return initiateMethod()
             }else{
                 selectedMethod = listMethod[0]
-                alertMethod(selectedMethod)
+                checkLiveness(selectedMethod)
+//                alertMethod(selectedMethod)
             }
         }
     }
@@ -337,13 +383,13 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
 //        methodTitle!!.text = msg
 
-        val builder = AlertDialog.Builder(activity)
-        builder.setMessage(msg)
-        builder.setCancelable(false)
-        builder.setPositiveButton("OK") { dialog, which -> checkLiveness(method) }
-        val dialog = builder.create()
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.show()
+//        val builder = AlertDialog.Builder(activity)
+//        builder.setMessage(msg)
+//        builder.setCancelable(false)
+//        builder.setPositiveButton("OK") { dialog, which -> checkLiveness(method) }
+//        val dialog = builder.create()
+//        dialog.setCanceledOnTouchOutside(false)
+//        dialog.show()
 
 
 
@@ -464,7 +510,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     //
                                         } else if (faces.size > 1) {
                                             Helper.toastMessage(this@MainActivity, "Lebih dari 2 Muka")
-                                            onBackPressed()
+                                            reInitiateMethod()
                                         }
 
                                     }

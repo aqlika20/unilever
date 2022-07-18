@@ -9,6 +9,8 @@
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/bg_selfie.xml" value="0.2265" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/bg_text.xml" value="0.215" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/biru.xml" value="0.3769230769230769" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/box_dash.xml" value="0.1775" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/btn_rounded.xml" value="0.234" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_baseline_navigate_next_24.xml" value="0.2265" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.2265" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_check_blue.xml" value="0.3828125" />
@@ -18,7 +20,7 @@
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/ic_home_white.xml" value="0.3828125" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/drawable/red.xml" value="0.3828125" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/activity_destination_form.xml" value="0.43537414965986393" />
-        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/activity_register.xml" value="0.2078125" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/camera_fragment.xml" value="0.23958333333333334" />
         <entry key="..\:/Project/Guest/guestbook-kemendagri-android/app/src/main/res/layout/detail_destination_item.xml" value="0.42459983150800334" />

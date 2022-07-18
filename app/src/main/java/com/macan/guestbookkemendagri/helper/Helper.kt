@@ -63,7 +63,7 @@ class Helper {
         const val API_KEY = "DDo1mP97M0CCphIukRAtGr0Yja1nHkTqMUhqEqrv9PiOnZUNlpBfG6R1I6mW"
 
         fun toastMessage(context: Context, msg: String){
-            return Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+            return Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
 
         fun alertDialog(context: Context?, msg: String?) {
