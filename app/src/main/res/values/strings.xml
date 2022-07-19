@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">FR UniLever</string>
     <string name="choose">Choose...</string>
 
@@ -16,7 +16,8 @@
     </string-array>
 
     <string name="loading">loading...</string>
-    <string name="detail">Detail</string>
+    <string name="detail">&#176;C</string>
+
     <string name="nomor_telepon">Nomor Telepon</string>
     <string name="_08xxxxxx">08XXXXXX</string>
     <string name="data_ktp">Data KTP</string>

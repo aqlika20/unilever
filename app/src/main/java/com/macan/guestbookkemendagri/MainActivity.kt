@@ -10,6 +10,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
 import android.media.Image
@@ -17,7 +21,6 @@ import android.media.ImageReader
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.provider.Settings.Secure
 import android.util.Log
 import android.util.Size
 import android.view.Surface
@@ -32,7 +35,6 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.macan.guestbookkemendagri.captureframecomponent.*
 import com.macan.guestbookkemendagri.helper.Helper
-import com.macan.guestbookkemendagri.helper.MyApp.Companion.getContext
 import com.macan.guestbookkemendagri.network.RetrofitClient
 import kotlinx.coroutines.*
 import okhttp3.ResponseBody
@@ -46,10 +48,10 @@ import java.lang.Runnable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.concurrent.schedule
 
 
-class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
+class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
+    SensorEventListener {
     var timer: Timer? = null
 
     var scope = MainScope() // could also use an other scope such as viewModelScope if available
@@ -57,6 +59,9 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
     var methodTitle: TextView? = null
     var deviceName: TextView? = null
+    var temperature: TextView? = null
+    private var mSensorManager: SensorManager? = null
+    private var mTempSensor: Sensor? = null
 
     var name: TextView? = null
     var tgl: TextView? = null
@@ -127,7 +132,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
 
 
-        methodTitle = findViewById(R.id.methodTitle)
+        temperature = findViewById(R.id.methodTitle)
         frameContainer = findViewById(R.id.container)
         graphicOverlay = findViewById(R.id.graphic_overlay)
         deviceName = findViewById(R.id.deviceName)
@@ -168,6 +173,11 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
             setFragment()
         }
 
+        // Sensor Temperature
+        TempSensorActivity()
+        if (mTempSensor == null) {
+            temperature!!.setText("Sorry, sensor not available for this device.");
+        }
 
         val builder = AlertDialog.Builder(activity)
         builder.setMessage("Mohon menunjukkan wajah di kamera.")
@@ -176,9 +186,11 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         val dialog = builder.create()
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
-
-
-
+    }
+    // Sensor Temperature
+    fun TempSensorActivity() {
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        mTempSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
     }
 
     override fun onRestart() {
@@ -190,9 +202,9 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
     private fun reInitiateMethod(){
         methodFinished = false
-        name!!.setText(" - ")
-        role!!.setText(" - ")
-        tgl!!.setText(" - ")
+//        name!!.setText(" - ")
+//        role!!.setText(" - ")
+//        tgl!!.setText(" - ")
         initiateMethod()
     }
     private fun initiateMethod(){
@@ -598,5 +610,16 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
         if(!recursiveRunning){
             finish()
         }
+    }
+
+    // Sensor Temperature
+    override fun onSensorChanged(event: SensorEvent) {
+        val ambient_temperature = event.values[0]
+        temperature!!.setText("""Ambient Temperature: $ambient_temperature${resources.getString(R.string.detail)}"""
+                )
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Do something here if sensor accuracy changes.
     }
 }
