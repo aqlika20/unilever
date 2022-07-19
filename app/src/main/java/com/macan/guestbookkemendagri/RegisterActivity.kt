@@ -1,11 +1,13 @@
 package com.macan.guestbookkemendagri
 
 import android.Manifest
+import android.R.attr
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.macan.guestbookkemendagri.helper.Helper
+import com.macan.guestbookkemendagri.helper.MyApp.Companion.getContext
 import com.macan.guestbookkemendagri.network.RetrofitClient
 import okhttp3.ResponseBody
 import org.json.JSONException
@@ -327,11 +330,27 @@ class RegisterActivity : AppCompatActivity() {
             when(requestCode){
 
                 Helper.CAMERA_CAPTURE_CODE -> {
-                    photo!!.setImageURI(image_uri)
+//                    photo!!.setImageURI(image_uri)
+
                     val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, image_uri)
                     val nh = (bitmap.height * (256.0 / bitmap.width)).toInt()
                     val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 256, nh, true)
                     encodedImage = Helper.encodeImage(scaledBitmap!!)
+
+                    val bp = MediaStore.Images.Media.getBitmap(
+                        getContext().getContentResolver(),
+                        image_uri
+                    )
+                    val matrix = Matrix()
+                    matrix.postRotate(90F)
+
+                    val bmp = Bitmap.createBitmap(bp,0,0,bp.getWidth(),
+                        bp.getHeight(),
+                        matrix,
+                        true
+                    )
+                    photo!!.setImageBitmap(bmp)
+
 //                    Log.i("Base64",encodedImage)
                 }
             }

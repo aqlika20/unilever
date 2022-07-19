@@ -135,18 +135,11 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
         name = findViewById(R.id.name)
         tgl = findViewById(R.id.tgl)
-//        typeIdentity = findViewById(R.id.typeIdentity)
         role = findViewById(R.id.role)
 
 //        deviceName!!.text = "Device ID : " + android_id
 
         boundingBoxFrameLayout = findViewById(R.id.boundingBoxFrame)
-
-//        val current = LocalDateTime.now()
-//        val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
-//        val formatted = current.format(formatter)
-
-//        tgl!!.text = formatted
 
         optionsFaceDetector = FaceDetectorOptions.Builder()
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
@@ -205,7 +198,6 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     private fun initiateMethod(){
         recursiveRunning = false
         if(methodFinished){
-//            Helper.toastMessage(this@MainActivity, Helper.encodeImage(selectedImage!!))
             RetrofitClient.instance.findGuest(Helper.encodeImage(selectedImage!!)).enqueue(object :
                 Callback<ResponseBody> {
                 @RequiresApi(Build.VERSION_CODES.O)
@@ -219,55 +211,18 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                         val result = JSONObject(response.body()!!.string())
                         val message: String = result.getString("message")
                         val namaVal: String = result.getString("name")
-//                        val uniqeu_identity_number: String = result.getString("unique_identity_number")
-//                        val identity_type_name: String = result.getString("identity_type_name")
                         val role_name: String = result.getString("role_name")
                         val current = LocalDateTime.now()
                         val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
                         val formatted = current.format(formatter)
 
-//                        nama = namaVal
-//                        no_identity = uniqeu_identity_number
-//                        type_identity = identity_type_name
-//                        str_role = role_name
-
                         name!!.setText(namaVal)
                         role!!.setText(role_name)
                         tgl!!.setText(formatted)
 
-//                        noIdentity!!.setText(uniqeu_identity_number)
-//                        typeIdentity!!.setText(identity_type_name)
-
-
-//                        val timer = Timer("schedule", true);
-//                        timer.schedule(3000) {
-//                            name!!.setText(" - ")
-//                            role!!.setText(" - ")
-//                            tgl!!.setText(" - ")
-//
-////                            noIdentity!!.setText(" - ")
-////                            typeIdentity!!.setText(" - ")
-//                        }
-
                         reInitiateMethod()
 
                         Helper.toastMessage(this@MainActivity, message)
-
-//                        val nama: String = result.getString("name")
-//                        val uniqeu_identity_number: String = result.getString("unique_identity_number")
-//                        val identity_type_name: String = result.getString("identity_type_name")
-//                        val role_name: String = result.getString("role_name")
-
-//                        val message: String = result.getString("message")
-//                        val message: String = result.getString("message")
-
-//                        Helper.toastMessage(this@MainActivity, "yayayayya" + nama + uniqeu_identity_number + identity_type_name + role_name)
-//                        Helper.toastMessage(this@MainActivity, Helper.encodeImage(selectedImage!!))
-
-//                        nama = result.getString("name")
-//                        no_identity = result.getString("uniqeu_identity_number")
-//                        type_identity = result.getString("identity_type_name")
-//                        str_role = result.getString("role_name")
 
 
                     } catch (e: JSONException) {
@@ -332,27 +287,14 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
             })
 
-//            val intent = Intent(this@MainActivity, DestinationFormActivity::class.java)
-//            intent.putExtra("image", Helper.encodeImage(selectedImage!!))
-//            startActivity(intent)
-//            finish()
         }else{
             //initiate liveness method here.
             if (listMethod.isEmpty()){
-//                listMethod.add(Helper.METHOD_MOUTH)
-//                listMethod.add(Helper.METHOD_EYES)
-//                listMethod.add(Helper.METHOD_HEAD_RIGHT)
-//                listMethod.add(Helper.METHOD_HEAD_LEFT)
-//                listMethod.add(Helper.METHOD_EYE_LEFT)
-//                listMethod.add(Helper.METHOD_EYE_RIGHT)
-
-//                listMethod.shuffle()
                 listMethod.add(0, Helper.METHOD_FACE)
                 return initiateMethod()
             }else{
                 selectedMethod = listMethod[0]
                 checkLiveness(selectedMethod)
-//                alertMethod(selectedMethod)
             }
         }
     }
@@ -456,23 +398,17 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
                                                 if (bounds.left > BoundingBoxFrameLayout.left && bounds.top > BoundingBoxFrameLayout.top && bounds.right < BoundingBoxFrameLayout.right && bounds.bottom < BoundingBoxFrameLayout.bottom && face.rightEyeOpenProbability != null && face.leftEyeOpenProbability != null) {
                                                     Log.i("capturedInFrame", "Yes")
-
-                                                    if (face.rightEyeOpenProbability > 0.60 && face.leftEyeOpenProbability > 0.60) {
-                                                        Log.i("eyesOpen", "Yes")
-                                                        //                                       val croppedBmp: Bitmap = Bitmap.createBitmap(rotatedBitmap, bounds.left, bounds.top, bounds.width(), bounds.height()) //crop the face
-                                                        selectedImage = rgbFrameBitmap!!
-                                                        methodFinished(currMethod)
-                                                        postInferenceCallback!!.run()
-                                                    }
-    //
+//                                                  val croppedBmp: Bitmap = Bitmap.createBitmap(rotatedBitmap, bounds.left, bounds.top, bounds.width(), bounds.height()) //crop the face
+                                                    selectedImage = rgbFrameBitmap!!
+                                                    methodFinished(currMethod)
+                                                    postInferenceCallback!!.run()
 
                                                 }
 
                                             }
-    //
+
                                         } else if (faces.size > 1) {
                                             Helper.toastMessage(this@MainActivity, "Lebih dari 2 Muka")
-//                                            reInitiateMethod()
                                         }
 
                                     }
@@ -492,7 +428,6 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     }
 
     fun methodFinished(currMethod: Int){
-//        Helper.toastMessage(activity!!, "Berhasil!")
         scope.cancel()
         if(!methodFinished){
             if(listMethod.contains(currMethod)){
