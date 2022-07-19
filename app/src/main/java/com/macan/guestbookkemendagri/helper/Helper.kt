@@ -125,12 +125,14 @@ class Helper {
         }
 
 
-        fun rotateBitmap(source: Bitmap, angle: Float): Bitmap? {
+        fun rotateBitmap(source: Bitmap, angle: Float, mirror: Boolean = false): Bitmap? {
             val matrix = Matrix()
             matrix.postRotate(angle)
+            if(mirror){
+                matrix.postScale(-1f, 1f)
+            }
             return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
         }
-
         //barcode generator
         @SuppressLint("SetTextI18n")
         fun generateQRCode(context: Context, text: String): Bitmap {
