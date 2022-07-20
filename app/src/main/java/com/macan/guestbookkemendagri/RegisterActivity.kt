@@ -34,6 +34,7 @@ class RegisterActivity : AppCompatActivity() {
     private var nama: EditText? = null
     private var unique_identity_number: EditText? = null
     private var photo: ImageView? = null
+    private var btnBack: ImageView? = null
 
     private var btnNext: Button? = null
     private var validator: AwesomeValidation? = null
@@ -58,6 +59,7 @@ class RegisterActivity : AppCompatActivity() {
         photo = findViewById(R.id.photo)
         registerGoToFaceRecog = findViewById(R.id.registerGoToFaceRecog)
         btnNext = findViewById(R.id.btn_next)
+        btnBack = findViewById(R.id.back)
 
         // Dropdown Button Identity Type Id
         val type_identity = resources.getStringArray(R.array.type_identity)
@@ -129,6 +131,10 @@ class RegisterActivity : AppCompatActivity() {
             if (!hasFocus) {
                 Helper.hideKeyboard(v.context, v)
             }
+        }
+
+        btnBack!!.setOnClickListener{
+            backToLobby()
         }
 
         registerGoToFaceRecog!!.setOnClickListener{
@@ -215,7 +221,15 @@ class RegisterActivity : AppCompatActivity() {
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, Helper.CAMERA_CAPTURE_CODE)
     }
+    private fun backToLobby(){
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        backToLobby()
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
