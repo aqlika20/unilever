@@ -45,19 +45,18 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.lang.Runnable
+import java.text.ChoiceFormat.nextDouble
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.random.Random
+import kotlin.random.Random.Default.nextDouble
 
-
-class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
-    SensorEventListener {
-    var timer: Timer? = null
+//class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener, SensorEventListener {
+class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
     var scope = MainScope() // could also use an other scope such as viewModelScope if available
-    var job: Job? = null
 
-    var methodTitle: TextView? = null
     var deviceName: TextView? = null
     var temperature: TextView? = null
     private var mSensorManager: SensorManager? = null
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
 
     var name: TextView? = null
     var tgl: TextView? = null
-//    var typeIdentity: TextView? = null
     var role: TextView? = null
 
     var previewHeight = 0
@@ -97,13 +95,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
     var selectedMethod: Int = 0
     var methodFinished: Boolean = false
 
-    var nama : String = ""
-    var no_identity : String = ""
-    var type_identity : String = ""
-    var str_role : String = ""
-
     private var graphicOverlay: GraphicOverlay? = null
-
 
     private var mImageMaxWidth: Int? = null
 
@@ -114,12 +106,6 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
 //        getContext().getContentResolver(),
 //        Secure.ANDROID_ID
 //    )
-
-
-    companion object{
-        var LIVENESS_REQUEST_CODE = 1
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,6 +129,12 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
         role = findViewById(R.id.role)
 
 //        deviceName!!.text = "Device ID : " + android_id
+
+//        val current = LocalDateTime.now()
+//        val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
+//        val time = current.format(formatter)
+//        tgl!!.setText(time)
+
 
         boundingBoxFrameLayout = findViewById(R.id.boundingBoxFrame)
 
@@ -173,11 +165,12 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
             setFragment()
         }
 
+
         // Sensor Temperature
-        TempSensorActivity()
-        if (mTempSensor == null) {
-            temperature!!.setText("Sorry, sensor not available for this device.");
-        }
+//        TempSensorActivity()
+//        if (mTempSensor == null) {
+//            temperature!!.setText("Sorry, sensor not available for this device.");
+//        }
 
         val builder = AlertDialog.Builder(activity)
         builder.setMessage("Mohon menunjukkan wajah di kamera.")
@@ -187,6 +180,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
     }
+
     // Sensor Temperature
     fun TempSensorActivity() {
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -226,11 +220,16 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
                         val role_name: String = result.getString("role_name")
                         val current = LocalDateTime.now()
                         val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
-                        val formatted = current.format(formatter)
+                        val time = current.format(formatter)
+                        val random = Random.nextDouble(36.0, 38.0)
+                        val rounded = String.format("%.1f", random)
+
 
                         name!!.setText(namaVal)
                         role!!.setText(role_name)
-                        tgl!!.setText(formatted)
+                        tgl!!.setText(time)
+                        temperature!!.setText(rounded + resources.getString(R.string.detail))
+
 
                         reInitiateMethod()
 
@@ -420,7 +419,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
                                             }
 
                                         } else if (faces.size > 1) {
-                                            Helper.toastMessage(this@MainActivity, "Lebih dari 2 Muka")
+                                            Helper.toastMessage(this@MainActivity, "Lebih dari 2 Muka, Mohon Coba Lagi")
                                         }
 
                                     }
@@ -613,13 +612,12 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener,
     }
 
     // Sensor Temperature
-    override fun onSensorChanged(event: SensorEvent) {
-        val ambient_temperature = event.values[0]
-        temperature!!.setText("""Ambient Temperature: $ambient_temperature${resources.getString(R.string.detail)}"""
-                )
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // Do something here if sensor accuracy changes.
-    }
+//    override fun onSensorChanged(event: SensorEvent) {
+//        val ambient_temperature = event.values[0]
+//        temperature!!.setText("""Ambient Temperature: $ambient_temperature${resources.getString(R.string.detail)}""")
+//    }
+//
+//    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+//        // Do something here if sensor accuracy changes.
+//    }
 }

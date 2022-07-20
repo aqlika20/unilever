@@ -31,12 +31,9 @@ import java.io.IOException
 
 
 class RegisterActivity : AppCompatActivity() {
-    private var registerGoToOCR: ImageView? = null
     private var nama: EditText? = null
     private var unique_identity_number: EditText? = null
-//    private var identity_type_id: Spinner? = null
     private var photo: ImageView? = null
-//    private var role: EditText? = null
 
     private var btnNext: Button? = null
     private var validator: AwesomeValidation? = null
@@ -49,13 +46,6 @@ class RegisterActivity : AppCompatActivity() {
     var image_uri: Uri? = null
 
     private var encodedImage: String = ""
-    private var capturedImage: Bitmap? = null
-
-    companion object{
-        val READ_OCR_REQUEST_CODE = 123
-
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,12 +124,6 @@ class RegisterActivity : AppCompatActivity() {
                 Helper.hideKeyboard(v.context, v)
             }
         }
-
-//        identity_type_id!!.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-//            if (!hasFocus) {
-//                Helper.hideKeyboard(v.context, v)
-//            }
-//        }
 
         role!!.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
@@ -250,8 +234,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun submitForm(){
-
-
         val namaVal = nama!!.text.toString().trim()
         val noidentityVal = unique_identity_number!!.text.toString().trim()
         val typeidentityVal = arrayIndentity

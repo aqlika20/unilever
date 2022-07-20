@@ -42,25 +42,10 @@ class Helper {
     companion object{
         val BASE_URL = "http://192.168.1.237:8000"
 
-        val PROFILE_PERSONAL_REQUEST_CODE = 1
-
         val CAMERA_PERMISSION_CODE = 1000
         val CAMERA_CAPTURE_CODE = 1001
 
-        var numberRegex = "\\d+"
-        var regexPassword = ".{6,}"
-        var requiredRegex = "^(?=\\s*\\S).*$"
-
         val METHOD_FACE = 0 //for capturing the face
-        val METHOD_MOUTH = 1
-        val METHOD_EYES = 2
-        val METHOD_HEAD_RIGHT = 3
-        val METHOD_HEAD_LEFT = 4
-        val METHOD_EYE_RIGHT = 5
-        val METHOD_EYE_LEFT = 6
-
-        var nikLength = 16
-        const val API_KEY = "DDo1mP97M0CCphIukRAtGr0Yja1nHkTqMUhqEqrv9PiOnZUNlpBfG6R1I6mW"
 
         fun toastMessage(context: Context, msg: String){
             return Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
