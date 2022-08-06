@@ -1,10 +1,8 @@
 package com.macan.guestbookkemendagri.helper
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
@@ -16,12 +14,13 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.google.zxing.BarcodeFormat
@@ -34,7 +33,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
-import java.util.*
 
 
 class Helper {
@@ -47,7 +45,29 @@ class Helper {
 
         val METHOD_FACE = 0 //for capturing the face
 
+
         fun toastMessage(context: Context, msg: String){
+            return Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        }
+
+//        fun successtoastMessage(context: Context, msg: String){
+//            val inflater: LayoutInflater =
+//            val layout: View = inflater.inflate(
+//                R.layout.custom_toas_success,
+//                findViewById(R.id.toast_layout_root) as ViewGroup?
+//            )
+//
+//            val text = layout.findViewById<View>(R.id.text) as TextView
+//            text.text = "This is a custom toast"
+//
+//            val toast = Toast(ApplicationProvider.getApplicationContext<Context>())
+//            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0)
+//            toast.duration = Toast.LENGTH_LONG
+//            toast.setView(layout)
+//            toast.show()
+//        }
+
+        fun failedtoastMessage(context: Context, msg: String){
             return Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
 

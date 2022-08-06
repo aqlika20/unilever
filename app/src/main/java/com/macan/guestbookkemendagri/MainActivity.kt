@@ -9,15 +9,15 @@ import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
 import android.media.Image
 import android.media.ImageReader
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -45,12 +45,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.lang.Runnable
-import java.text.ChoiceFormat.nextDouble
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.random.Random
-import kotlin.random.Random.Default.nextDouble
 
 //class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener, SensorEventListener {
 class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
@@ -95,6 +92,8 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     var selectedMethod: Int = 0
     var methodFinished: Boolean = false
 
+    var beep: MediaPlayer ? = null
+
     private var graphicOverlay: GraphicOverlay? = null
 
     private var mImageMaxWidth: Int? = null
@@ -102,11 +101,12 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     // Max height (portrait mode)
     private var mImageMaxHeight: Int? = null
 
-//    private val android_id = Secure.getString(
+//    private val android_id = Settings.Secure.getString(
 //        getContext().getContentResolver(),
-//        Secure.ANDROID_ID
+//        Settings.Secure.ANDROID_ID
 //    )
-    @RequiresApi(Build.VERSION_CODES.O)
+//    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.R)
     @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,10 +130,10 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
 //        deviceName!!.text = "Device ID : " + android_id
 
-//        val current = LocalDateTime.now()
-//        val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
-//        val time = current.format(formatter)
-//        tgl!!.setText(time)
+
+
+        beep = MediaPlayer.create(this, R.raw.beep)
+
 
 
         boundingBoxFrameLayout = findViewById(R.id.boundingBoxFrame)
@@ -143,6 +143,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
             .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
             .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
             .build()
+
 
         btnRegister!!.setOnClickListener{
             val intent = Intent(this@MainActivity, RegisterActivity::class.java)
@@ -165,6 +166,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
             setFragment()
         }
 
+//    Helper.successtoastMessage(this, "berhasil")
 
         // Sensor Temperature
 //        TempSensorActivity()
@@ -182,10 +184,10 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
     }
 
     // Sensor Temperature
-    fun TempSensorActivity() {
-        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        mTempSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
-    }
+//    fun TempSensorActivity() {
+//        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+//        mTempSensor = mSensorManager!!.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
+//    }
 
     override fun onRestart() {
         super.onRestart()
@@ -219,9 +221,9 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                         val namaVal: String = result.getString("name")
                         val role_name: String = result.getString("role_name")
                         val current = LocalDateTime.now()
-                        val formatter = DateTimeFormatter.ofPattern("HH:mm / dd - MM - YYYY")
+                        val formatter = DateTimeFormatter.ofPattern("HH:mm / dd-MM-YYYY")
                         val time = current.format(formatter)
-                        val random = Random.nextDouble(36.0, 38.0)
+                        val random = Random.nextDouble(36.0, 37.0)
                         val rounded = String.format("%.1f", random)
 
 
@@ -230,10 +232,12 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
                         tgl!!.setText(time)
                         temperature!!.setText(rounded + resources.getString(R.string.detail))
 
+                        Helper.toastMessage(this@MainActivity, message)
+
+                        beep!!.start()
 
                         reInitiateMethod()
 
-                        Helper.toastMessage(this@MainActivity, message)
 
 
                     } catch (e: JSONException) {
@@ -420,6 +424,7 @@ class MainActivity : AppCompatActivity(), ImageReader.OnImageAvailableListener {
 
                                         } else if (faces.size > 1) {
                                             Helper.toastMessage(this@MainActivity, "Lebih dari 2 Muka, Mohon Coba Lagi")
+                                            reInitiateMethod()
                                         }
 
                                     }

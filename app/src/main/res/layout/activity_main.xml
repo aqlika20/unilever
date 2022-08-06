@@ -65,7 +65,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="120dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Nama"
                     android:textColor="@color/black"
@@ -116,9 +116,9 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="120dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Jam / Tanggal"
+                    android:text="Jam / Tgl"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
